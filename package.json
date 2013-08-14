@@ -1,0 +1,23 @@
+{
+  "name": "rssaas",
+  "version": "0.0.0",
+  "main": "./index.js",
+  "author": {
+    "name": "TehShrike",
+    "email": "me@JoshDuff.com",
+    "url": "http://joshduff.com"
+  },
+  "description": "RSS as a service",
+  "keywords": [
+    "rss"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TehShrike/rssaas.git"
+  },
+  "dependencies": {
+    "request": "~2.25.0",
+    "async": "~0.2.9",
+    "text-metadata-parser": "~1.0.1"
+  }
+}
