@@ -1,16 +1,41 @@
 var url = require('url')
 var qs = require('querystring')
-var request = require('request')
 var async = require('async')
+var rss = require('rss')
 var tmp = require('text-metadata-parser')
+var cacheGet = require('./cache.js')()
 
 var downloadAllFiles = function(root, file_names, cb) {
 	async.map(file_names, function(name, mapResult) {
 		var path = url.resolve(root, name)
-		request(path, function(err, res, body) {
+		cacheGet(path, function(err, body) {
 			mapResult(err, err || tmp(body))
 		})
 	}, cb)
+}
+
+var buildRSSFeed = function(indexPath, results) {
+	console.log(indexPath)
+	console.log(results)
+	// insert https://npmjs.org/package/rss here
+	return results
+}
+
+var getRSSFeed = function(indexJsonPath, cb) {
+	cacheGet(indexJsonPath, function(error, body) {
+		if (error) {
+			console.log(error)
+		} else {
+			var post_files = JSON.parse(body)
+			downloadAllFiles(parameters.root, post_files, function(err, results) {
+				if (!err) {
+					results = buildRSSFeed(JSON.stringify(results))
+				}
+
+				cb(err, results)
+			})
+		}
+	})
 }
 
 var start = function(port) {
@@ -20,19 +45,8 @@ var start = function(port) {
 		if (typeof parameters.index !== 'undefined'
 				&& typeof parameters.root !== 'undefined') {
 			console.log("Looking up " + parameters.index)
-			request(parameters.index, function(error, response, body) {
-				if (error) {
-					console.log(error)
-				} else {
-					var post_files = JSON.parse(body)
-					downloadAllFiles(parameters.root, post_files, function(err, results) {
-						if (!err) {
-							res.end(JSON.stringify(results))
-						} else {
-							res.end(err.message)
-						}
-					})
-				}
+			getRSSFeed(parameters.index, function(err, xml) {
+				res.end(err || xml)
 			})
 		}
 	}).listen(port)

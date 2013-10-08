@@ -18,6 +18,7 @@
   "dependencies": {
     "request": "~2.25.0",
     "async": "~0.2.9",
-    "text-metadata-parser": "~1.0.1"
+    "text-metadata-parser": "~1.0.1",
+    "rss": "~0.2.1"
   }
 }
