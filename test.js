@@ -5,19 +5,24 @@ var send = require('send')
 
 
 
-require('http').createServer(function(req, res) {
+var blogServer = require('http').createServer(function(req, res) {
 	send(req, url.parse(req.url).pathname)
 		.root('./test1')
 		.pipe(res)
-}).listen(8080)
+})
 
-rssaas(9000)
+blogServer.listen(8888)
 
-request({ 
+var rssServer = rssaas()
+rssServer.listen(9000)
+
+request({
 	url: 'http://localhost:9000/posts',
 	qs: {
-		index: 'http://localhost:8080/index.json',
-		root: 'http://localhost:8080/'
+		postUrlRoot: 'http://somesite.com/post/',
+		noddityRoot: 'http://localhost:8888/',
+		title: "My awesome blog",
+		author: "Mr. Fantastic"
 	}
 }, function (error, response, body) {
 	if (error) {
@@ -26,4 +31,6 @@ request({
 	} else {
 		console.log(body)
 	}
+	rssServer.close()
+	blogServer.close()
 })

@@ -17,8 +17,14 @@
   },
   "dependencies": {
     "request": "~2.25.0",
-    "async": "~0.2.9",
-    "text-metadata-parser": "~1.0.1",
-    "rss": "~0.2.1"
+    "rss": "~0.2.1",
+    "stringmap": "~0.2.2",
+    "noddity-butler": "~0.1.0",
+    "level": "~0.18.0",
+    "sanitize-filename": "~1.0.1",
+    "pagedown": "~1.1.0"
+  },
+  "devDependencies": {
+    "send": "~0.1.4"
   }
 }
