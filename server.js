@@ -1,1 +1,1 @@
-require('./index.js').listen(9000)
+require('./index.js')().listen(80)

@@ -23,6 +23,8 @@ function getRssFeedXml(butler, feedUrl, siteRootUrl, blogTitle, blogAuthor, cb) 
 
 			var addToFeed = rss.item.bind(rss)
 
+			posts.reverse()
+
 			posts.map(function turnPostIntoRssItem(post) {
 				var postUrl = url.resolve(siteRootUrl, post.filename)
 				return {
