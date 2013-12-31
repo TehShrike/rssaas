@@ -3,8 +3,6 @@ var request = require('request')
 var url = require('url')
 var send = require('send')
 
-
-
 var blogServer = require('http').createServer(function(req, res) {
 	send(req, url.parse(req.url).pathname)
 		.root('./test1')
