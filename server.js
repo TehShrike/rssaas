@@ -1,1 +1,1 @@
-require('./index.js')().listen(80)
+require('./index.js')().listen(process.env.PORT)
