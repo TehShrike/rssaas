@@ -55,7 +55,7 @@ module.exports = function Rssaas() {
 
 	function getAppropriateButler(rootUrl) {
 		if (!butlers.has(rootUrl)) {
-			var db = level(joinPath('butlers', sanitize(rootUrl)))
+			var db = level(joinPath('/tmp', sanitize(rootUrl)))
 			var butler = new Butler(rootUrl, db)
 			butlers.set(rootUrl, butler)
 		}
