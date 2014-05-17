@@ -39,7 +39,6 @@ function getRssFeedXml(butler, feedUrl, postUrlRoot, blogTitle, blogAuthor, cb) 
 
 			posts.map(function turnPostIntoRssItem(post) {
 				var postUrl = dumbResolve(postUrlRoot, post.filename)
-				console.log("Linking to", postUrl)
 				return {
 					title: post.metadata.title || post.filename,
 					description: linkify(markdownToHtml(post.content)),
