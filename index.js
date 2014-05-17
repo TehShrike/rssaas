@@ -8,12 +8,22 @@ var sanitize = require("sanitize-filename")
 var safeConverter = require('pagedown').getSanitizingConverter()
 var markdownToHtml = safeConverter.makeHtml.bind(safeConverter)
 var joinPath = require('path').join
+var Linkifier = require('noddity-linkifier')
 
-function getRssFeedXml(butler, feedUrl, siteRootUrl, blogTitle, blogAuthor, cb) {
+function dumbResolve(firstThingy, secondThingy) {
+	var separator = '/'
+	if (firstThingy[firstThingy.length - 1] === '/') {
+		separator = ''
+	}
+	return firstThingy + separator + secondThingy
+}
+
+function getRssFeedXml(butler, feedUrl, postUrlRoot, blogTitle, blogAuthor, cb) {
 	butler.getPosts({ mostRecent: 7 }, function(err, posts) {
 		if (err) {
 			cb(err)
 		} else {
+			var siteRootUrl = url.resolve(postUrlRoot, '')
 			var rss = new Rss({
 				title: blogTitle || siteRootUrl,
 				feed_url: feedUrl,
@@ -25,11 +35,14 @@ function getRssFeedXml(butler, feedUrl, siteRootUrl, blogTitle, blogAuthor, cb) 
 
 			posts.reverse()
 
+			var linkify = new Linkifier(postUrlRoot)
+
 			posts.map(function turnPostIntoRssItem(post) {
-				var postUrl = url.resolve(siteRootUrl, post.filename)
+				var postUrl = dumbResolve(postUrlRoot, post.filename)
+				console.log("Linking to", postUrl)
 				return {
 					title: post.metadata.title || post.filename,
-					description: markdownToHtml(post.content),
+					description: linkify(markdownToHtml(post.content)),
 					url: postUrl,
 					// Post URLs must be unique!
 					// guid: '',

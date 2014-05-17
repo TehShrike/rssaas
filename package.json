@@ -1,6 +1,6 @@
 {
   "name": "rssaas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./index.js",
   "author": {
     "name": "TehShrike",
@@ -22,7 +22,8 @@
     "noddity-butler": "~1.1.2",
     "level": "~0.18.0",
     "sanitize-filename": "~1.0.1",
-    "pagedown": "~1.1.0"
+    "pagedown": "~1.1.0",
+    "noddity-linkifier": "~1.0.0"
   },
   "devDependencies": {
     "send": "~0.1.4"
