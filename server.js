@@ -1,1 +1,3 @@
-require('./index.js')().listen(process.env.PORT)
+var noddityServer = require('noddity-service-server')
+var thisParticularImplementation = require('./index.js')
+noddityServer(thisParticularImplementation).listen(process.env.PORT)
