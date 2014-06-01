@@ -10,7 +10,7 @@ module.exports = function getRssFeedXml(context, cb) {
 		cb(new Error("'author' must be provided"))
 	} else {
 		var butler = context.butler
-		var postUrlRoot = context.postUrlRoot
+		var postUrlRoot = context.parameters.postUrlRoot
 		var dumbResolve = context.resolvePost
 		var blogTitle = context.parameters.title
 		var blogAuthor = context.parameters.author
