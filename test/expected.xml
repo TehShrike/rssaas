@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+	<channel>
+		<title><![CDATA[Blog Title]]></title>
+		<description><![CDATA[Blog Title]]></description>
+		<link>http://example.com/</link>
+		<generator>RSS for Node</generator>
+		<lastBuildDate>Wed, 07 Oct 2015 23:55:27 GMT</lastBuildDate>
+		<atom:link href="http://example.com/feed.xml" rel="self" type="application/rss+xml"/>
+		<ttl>720</ttl>
+		<item>
+			<title><![CDATA[This is the first post]]></title>
+			<description><![CDATA[<p>Howdy, and thanks for reading this post!</p>]]></description>
+			<link>http://example.com/blog/post1.md</link>
+			<guid isPermaLink="true">http://example.com/blog/post1.md</guid>
+			<dc:creator><![CDATA[Author]]></dc:creator>
+			<pubDate>Sat, 03 Aug 2013 17:29:29 GMT</pubDate>
+		</item>
+		<item>
+			<title><![CDATA[This is ANOTHER post]]></title>
+			<description><![CDATA[<p>Two posts, whaaat?</p>]]></description>
+			<link>http://example.com/blog/another-post.md</link>
+			<guid isPermaLink="true">http://example.com/blog/another-post.md</guid>
+			<dc:creator><![CDATA[Author]]></dc:creator>
+			<pubDate>Thu, 01 Aug 2013 19:10:29 GMT</pubDate>
+		</item>
+	</channel>
+</rss>
