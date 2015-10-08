@@ -1,7 +1,7 @@
 var url = require('url')
 var Rss = require('rss')
 var Renderer = require('noddity-renderer')
-var async = require('async')
+var mapAsync = require('map-async')
 
 module.exports = function getRssFeedXml(context, cb) {
 	if (typeof context.parameters.title === 'undefined') {
@@ -48,13 +48,13 @@ module.exports = function getRssFeedXml(context, cb) {
 
 				posts.reverse()
 
-				async.map(posts, function(post, cb) {
+				mapAsync(posts, function(post, next) {
 					renderer.renderPost(post, function(err, html) {
-						if (!err) {
-							post.html = html
-							cb(null, post)
+						if (err) {
+							next(err)
 						} else {
-							cb(err)
+							post.html = html
+							next(null, post)
 						}
 					})
 				}, function(err, posts) {

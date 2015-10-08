@@ -19,7 +19,7 @@
     "url": "https://github.com/TehShrike/rssaas.git"
   },
   "dependencies": {
-    "async": "^0.9.0",
+    "map-async": "^0.1.1",
     "noddity-renderer": "^2.0.0",
     "noddity-service-server": "^2.0.0",
     "rss": "^1.1.1"
