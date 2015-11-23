@@ -1,7 +1,15 @@
 var url = require('url')
 var Rss = require('rss')
-var Renderer = require('noddity-renderer')
+var render = require('noddity-render-static')
 var async = require('async')
+
+var templatePost = {
+	name: 'template',
+	metadata: {
+		title: 'RSS Template',
+	},
+	content: '{{>current}}'
+}
 
 module.exports = function getRssFeedXml(context, cb) {
 	if (typeof context.parameters.title === 'undefined') {
@@ -15,7 +23,12 @@ module.exports = function getRssFeedXml(context, cb) {
 		var blogTitle = context.parameters.title
 		var blogAuthor = context.parameters.author
 		var feedUrl = context.url
-		var linkify = context.linkify
+
+		var options = {
+			butler: context.butler,
+			linkifier: context.linkify,
+			data: {}
+		}
 
 		function turnPostIntoRssItem(post) {
 			var postUrl = dumbResolve(post.filename)
@@ -23,14 +36,12 @@ module.exports = function getRssFeedXml(context, cb) {
 				title: post.metadata.title || post.filename,
 				description: post.html,
 				url: postUrl,
-				// Post URLs must be unique!
+				// Because we're using an empty guid, post URLs must be unique!
 				// guid: '',
 				author: post.metadata.author || blogAuthor,
 				date: post.metadata.date
 			}
 		}
-
-		var renderer = new Renderer(butler, linkify)
 
 		butler.getPosts({ mostRecent: 7 }, function(err, posts) {
 			if (err) {
@@ -49,7 +60,7 @@ module.exports = function getRssFeedXml(context, cb) {
 				posts.reverse()
 
 				async.map(posts, function(post, cb) {
-					renderer.renderPost(post, function(err, html) {
+					render(templatePost, post, options, function(err, html) {
 						if (!err) {
 							post.html = html
 							cb(null, post)

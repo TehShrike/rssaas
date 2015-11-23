@@ -17,11 +17,12 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "noddity-renderer": "^2.0.0",
+    "noddity-render-static": "2.2.1",
     "noddity-service-server": "^2.0.0",
     "rss": "~0.2.1"
   },
   "devDependencies": {
+    "request": "2.67.0",
     "send": "~0.1.4"
   }
 }
