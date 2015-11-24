@@ -7,6 +7,7 @@ var templatePost = {
 	name: 'template',
 	metadata: {
 		title: 'RSS Template',
+		markdown: false
 	},
 	content: '{{>current}}'
 }
