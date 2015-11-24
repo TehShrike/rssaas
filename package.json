@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "noddity-renderer": "^2.0.0",
+    "noddity-render-static": "2.2.2",
     "noddity-service-server": "^2.0.0",
     "rss": "^1.1.1"
   },
