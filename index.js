@@ -1,9 +1,10 @@
-var url = require('url')
-var Rss = require('rss')
-var render = require('noddity-render-static')
-var async = require('async')
+const url = require('url')
+const Rss = require('rss')
+const promiseMap = require('p-map')
+const denodeify = require('then-denodeify')
+const render = denodeify(require('noddity-render-static'))
 
-var templatePost = {
+const templatePost = {
 	name: 'template',
 	metadata: {
 		title: 'RSS Template',
@@ -14,25 +15,34 @@ var templatePost = {
 
 module.exports = function getRssFeedXml(context, cb) {
 	if (typeof context.parameters.title === 'undefined') {
-		cb(new Error("'title' must be provided"))
+		cb(new Error(`'title' must be provided`))
 	} else if (typeof context.parameters.author === 'undefined') {
-		cb(new Error("'author' must be provided"))
+		cb(new Error(`'author' must be provided`))
 	} else {
-		var butler = context.butler
-		var postUrlRoot = context.parameters.postUrlRoot
-		var dumbResolve = context.resolvePost
-		var blogTitle = context.parameters.title
-		var blogAuthor = context.parameters.author
-		var feedUrl = context.url
+		const {
+			butler,
+			parameters,
+			resolvePost,
+			url: feedUrl,
+			linkify
+		} = context
 
-		var options = {
-			butler: context.butler,
-			linkifier: context.linkify,
+		const {
+			postUrlRoot,
+			title: blogTitle,
+			author: blogAuthor
+		} = parameters
+
+		const options = {
+			butler,
+			linkifier: linkify,
 			data: {}
 		}
 
+		const getPosts = denodeify(butler.getPosts)
+
 		function turnPostIntoRssItem(post) {
-			var postUrl = dumbResolve(post.filename)
+			const postUrl = resolvePost(post.filename)
 			return {
 				title: post.metadata.title || post.filename,
 				description: post.html,
@@ -44,40 +54,31 @@ module.exports = function getRssFeedXml(context, cb) {
 			}
 		}
 
-		butler.getPosts({ mostRecent: 7 }, function(err, posts) {
-			if (err) {
+		getPosts({ mostRecent: 7 }).then(posts => {
+			const siteRootUrl = url.resolve(postUrlRoot, '')
+			const rss = new Rss({
+				title: blogTitle,
+				feed_url: feedUrl,
+				site_url: siteRootUrl,
+				ttl: 12 * 60
+			})
+
+			const addToFeed = rss.item.bind(rss)
+
+			posts.reverse()
+
+			promiseMap(posts, post => {
+				return render(templatePost, post, options).then(html => {
+					post.html = html
+					return post
+				})
+			}).then(posts => {
+				posts.map(turnPostIntoRssItem).forEach(addToFeed)
+				cb(null, rss.xml())
+			}).catch(err => {
 				cb(err)
-			} else {
-				var siteRootUrl = url.resolve(postUrlRoot, '')
-				var rss = new Rss({
-					title: blogTitle,
-					feed_url: feedUrl,
-					site_url: siteRootUrl,
-					ttl: 12 * 60
-				})
-
-				var addToFeed = rss.item.bind(rss)
-
-				posts.reverse()
-
-				async.map(posts, function(post, cb) {
-					render(templatePost, post, options, function(err, html) {
-						if (!err) {
-							post.html = html
-							cb(null, post)
-						} else {
-							cb(err)
-						}
-					})
-				}, function(err, posts) {
-					if (err) {
-						cb(err)
-					} else {
-						posts.map(turnPostIntoRssItem).forEach(addToFeed)
-						cb(null, rss.xml())
-					}
-				})
-			}
+			})
 		})
+
 	}
 }
