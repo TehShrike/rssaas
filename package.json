@@ -9,10 +9,12 @@
   },
   "description": "RSS as a service",
   "keywords": [
-    "rss"
+    "rss",
+    "noddity"
   ],
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node test/test.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -26,11 +28,11 @@
     "then-denodeify": "1.0.0"
   },
   "devDependencies": {
-    "level-mem": "^0.18.0",
-    "noddity-butler": "^2.2.0",
-    "noddity-linkifier": "^2.1.0",
-    "request": "^2.64.0",
+    "level-mem": "~0.18.0",
+    "noddity-butler": "^2.6.1",
+    "noddity-linkifier": "^2.2.2",
+    "request": "^2.79.0",
     "send": "~0.1.4",
-    "tape": "^4.2.1"
+    "tape": "~4.6.3"
   }
 }
